@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { removeModel } from '../redux/ducks/models';
 import { Model } from '../utils/data';
 import ModelCard from './ModelCard';
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const BuilderSection = ({ hardwareName, hardwareModel }: Props) => {
-  // const router = useRouter();
+  const history = useHistory();
   const dispatch = useDispatch();
 
   return (
@@ -24,7 +24,7 @@ const BuilderSection = ({ hardwareName, hardwareModel }: Props) => {
           <div className="flex space-x-5">
             <button
               className="text-sm text-gray-300"
-              // onClick={() => router.push(`/${hardwareName.toLowerCase()}`)}
+              onClick={() => history.push(`/${hardwareName.toLowerCase()}`)}
             >
               change
             </button>
