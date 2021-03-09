@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import CheckBox from '../components/CheckBox';
 import ModelCard from '../components/ModelCard';
 import SearchBox from '../components/SearchBox';
@@ -9,36 +9,40 @@ import { addModel } from '../redux/ducks/models';
 import { Model } from '../utils/data';
 import getBrandsFromModels from '../utils/getBrandsFromModels';
 
-const HardwarePage = () => {
-  const router = useRouter();
+type Props = {
+  match?: any;
+};
+
+const HardwarePage = ({ match }: Props) => {
   // get the dynamic hardware from the url
-  const { hardware } = router.query;
+  const hardware = match?.params.hardware;
+  if (!hardware) return '404 not found';
   // ** if the url is "/processor", then the hardware variable will be "processor"
 
   // hooks
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [searchField, setSearchField] = useState('');
   const [brandsFilter, setBrandsFilter] = useState<Array<string>>([]);
 
   // actions
-  const handleAddModel = (model: Model) => {
+  const onAddModel = (model: Model) => {
     dispatch(addModel(model));
-    router.push('/');
+    history.push('/');
   };
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchField(event.target.value);
   };
 
-  const handleCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onCheckBoxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const target = event.target;
     const name = target.name;
     const checked = target.checked;
-
     checked
       ? setBrandsFilter([...brandsFilter, name])
-      : setBrandsFilter(brandsFilter.filter((brand) => brand !== name));
+      : setBrandsFilter(brandsFilter.filter(brand => brand !== name));
   };
 
   // get all hardwares from the data global state
@@ -59,16 +63,16 @@ const HardwarePage = () => {
   // filter the models to match the brands state
   const filterByBrands = (models: Model[]) => {
     if (brandsFilter.length < 1) return models;
-    return models.filter((model) =>
+    return models.filter(model =>
       brandsFilter.some(
-        (brand) => model.brand.toLowerCase() === brand.toLowerCase(),
-      ),
+        brand => model.brand.toLowerCase() === brand.toLowerCase()
+      )
     );
   };
 
   // filter the models to match the search input
   const filterByName = (models: Model[]) => {
-    return models.filter((model) => {
+    return models.filter(model => {
       return model.name.toLowerCase().includes(searchField.toLowerCase());
     });
   };
@@ -81,21 +85,21 @@ const HardwarePage = () => {
       {/* filters inputs */}
       <div className="flex items-center mb-6">
         {/* search */}
-        <SearchBox value={searchField} onChange={handleSearchChange} />
+        <SearchBox value={searchField} onChange={onSearchChange} />
         {/* brand checkboxes */}
         <ul className="flex items-center ml-10 space-x-10">
-          {brands.map((brand) => (
+          {brands.map(brand => (
             <li key={brand}>
-              <CheckBox value={brand} onChange={handleCheckBoxChange} />
+              <CheckBox value={brand} onChange={onCheckBoxChange} />
             </li>
           ))}
         </ul>
       </div>
       {/* models list */}
       <div className="space-y-6">
-        {filteredModels.map((model) => (
+        {filteredModels.map(model => (
           <div
-            onClick={() => handleAddModel(model)}
+            onClick={() => onAddModel(model)}
             className="duration-500 ease-out transform cursor-pointer hover:scale-102"
             key={model.id}
           >

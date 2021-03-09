@@ -1,8 +1,7 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { removeModel } from '../redux/ducks/models';
 import { Model } from '../utils/data';
 import ModelCard from './ModelCard';
@@ -13,7 +12,7 @@ type Props = {
 };
 
 const BuilderSection = ({ hardwareName, hardwareModel }: Props) => {
-  const router = useRouter();
+  // const router = useRouter();
   const dispatch = useDispatch();
 
   return (
@@ -25,7 +24,7 @@ const BuilderSection = ({ hardwareName, hardwareModel }: Props) => {
           <div className="flex space-x-5">
             <button
               className="text-sm text-gray-300"
-              onClick={() => router.push(`/${hardwareName.toLowerCase()}`)}
+              // onClick={() => router.push(`/${hardwareName.toLowerCase()}`)}
             >
               change
             </button>
@@ -42,7 +41,7 @@ const BuilderSection = ({ hardwareName, hardwareModel }: Props) => {
         <ModelCard model={hardwareModel} />
       ) : (
         // If there's no model in the props, render a "ADD COMPONENT" button
-        <Link href={`/${hardwareName.toLowerCase()}`}>
+        <Link to={`/${hardwareName.toLowerCase()}`}>
           <a className="flex items-center max-w-xs px-4 py-2 text-sm font-semibold bg-white rounded">
             <FaPlus className="mr-2" />
             ADD Component

@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { StoreState } from '../redux/configueStore';
 import { Model } from '../utils/data';
 import findOneEquivalentID from '../utils/findOneEquivalentID';
@@ -8,7 +8,7 @@ import ModelCard from './ModelCard';
 
 const Summary = () => {
   const selectedModels = useSelector(
-    (state: StoreState) => state.models.selectedModels,
+    (state: StoreState) => state.models.selectedModels
   );
   const hardwares = useSelector((state: StoreState) => state.data.hardwares);
   if (!hardwares || hardwares.length < 1) return null;
@@ -24,11 +24,11 @@ const Summary = () => {
       </h2>
       {/* selected hardwares cards */}
       <div className="space-y-5">
-        {hardwares.map((hardware) => {
+        {hardwares.map(hardware => {
           // this function will simply return the first "selectedModel" that match an ID inside any hardwares models
           const model: Model = findOneEquivalentID(
             hardware.models,
-            selectedModels,
+            selectedModels
           );
 
           return (
@@ -45,7 +45,7 @@ const Summary = () => {
                 // if no model
                 <div className="flex justify-between p-3 text-lg text-white bg-gray-dark">
                   Empty...
-                  <Link href={`/${hardware.name.toLowerCase()}`}>
+                  <Link to={`/${hardware.name.toLowerCase()}`}>
                     <a className="text-gray-400 hover:text-gray-300">
                       select one
                     </a>
